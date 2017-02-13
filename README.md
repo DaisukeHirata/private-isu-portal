@@ -48,3 +48,20 @@ Firebase側の`.read`は認証が無い前提で利用しています。
 もし認証を追記される場合は、[公式ドキュメント](https://www.firebase.com/docs/web/guide/login/password.html) を参考に、
 Firebase接続部分のコードの変更が必要です。
 
+### ベンチマーカの実行とFirebaseへのデータアップロードshell
+
+PixivのベンチマーカAMIにjq1.5をインストール
+
+```
+$ sudo curl -o /usr/bin/jq -L https://github.com/stedolan/jq/releases/download/jq-1.5/jq-linux64 && sudo chmod +x /usr/bin/jq 
+```
+
+`bench.sh` の 以下の行をチームごとに書き換えてください。
+
+```
+TEAM_NAME="xxxxxx"       # team name
+TARGET_IP="xx.xx.xx.xx"  # ip address of competition instance
+PORTAL_HOST="xxxxxx.firebaseio.com" # Firebase Realtime DB hostname
+```
+
+TEAM_NAME, TARGET_IP はチームごとに設定します。PORTAL_HOST はチームを横断して共通です。
