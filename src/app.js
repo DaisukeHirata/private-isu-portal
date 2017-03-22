@@ -1,7 +1,7 @@
 import 'babel-polyfill';
 import _ from 'underscore';
 import Firebase from 'firebase';
-google.load("visualization", "1", {packages:["corechart"]});
+google.load("visualization", "1", { packages: ["corechart"] });
 
 /**
  * GoogleChartsでの描画用にグラフを整形する。
@@ -44,12 +44,12 @@ async function draw() {
 
     const teams = Object.keys(jsonResponse);
     const arrayToDraw = []; // グラフ描画用の配列
-    const timeStamps = [];  // グラフ描画用の配列を作成するための、一時的なタイムスタンプ配列
+    const timeStamps = []; // グラフ描画用の配列を作成するための、一時的なタイムスタンプ配列
 
     // タイムスタンプのみが格納された配列を作る
     teams.forEach(teamName => {
       Object.values(jsonResponse[teamName]).forEach(result => {
-        if (!_.contains(timeStamps, result.timestamp)){
+        if (!_.contains(timeStamps, result.timestamp)) {
           timeStamps.push(result.timestamp);
         }
       });
@@ -61,7 +61,7 @@ async function draw() {
       teams.forEach((teamName, k) => {
         let t = 0;
         Object.values(jsonResponse[teamName]).forEach(result => {
-          if(result.timestamp === timestamp) {
+          if (result.timestamp === timestamp) {
             t = result.score;
           }
         });
@@ -77,8 +77,8 @@ async function draw() {
 
     // 折れ線グラフを描画する
     function drawChart() {
-      const dataTable= new google.visualization.DataTable();
-      dataTable.addColumn('datetime','時間');
+      const dataTable = new google.visualization.DataTable();
+      dataTable.addColumn('datetime', '時間');
 
       teams.forEach(teamName => {
         dataTable.addColumn('number', teamName);
@@ -86,7 +86,7 @@ async function draw() {
 
       dataTable.addRows(arrayToDraw);
 
-      const options = {title: 'TD ISUCON Score', height:  320};
+      const options = { title: 'TD ISUCON Score', height: 320 };
       const chart = new google.visualization.LineChart(document.getElementById('score'));
 
       chart.draw(dataTable, options);
@@ -100,8 +100,6 @@ async function draw() {
         arrayToDrawBar.push([teamName, arrayToDraw[arrayToDraw.length - 1][i + 1]]);
       });
 
-      arrayToDrawBar.unshift(['チーム名', 'スコア']);
-
       arrayToDrawBar.sort((a, b) => {
         if (a[1] < b[1]) {
           return 1;
@@ -112,11 +110,13 @@ async function draw() {
         }
       });
 
+      arrayToDrawBar.unshift(['チーム名', 'Score']);
+
       const dataBar = new google.visualization.arrayToDataTable(arrayToDrawBar);
       const barChart = new google.visualization.BarChart(document.getElementById('barChart'));
 
       const options = {
-        height: 320 
+        height: 360
       };
 
       barChart.draw(dataBar, options);
@@ -131,7 +131,7 @@ async function draw() {
 }
 
 // XXXXをご自身のFirebaseプロジェク卜のURLに変更してください
-const baseUrl = 'https://XXXX.firebaseio.com/'; 
+const baseUrl = 'https://XXXX.firebaseio.com/';
 const url = `${baseUrl}teams/.json`;
 const myFirebaseRef = new Firebase(baseUrl);
 
